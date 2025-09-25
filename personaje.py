@@ -26,3 +26,5 @@ mi_personaje.atributos()
 
 mi_personaje.subir_nivel(5, 10, 5, 0)
 mi_personaje.atributos()
+
+dog = personaje("EL JAJAS", 1000, 1000, 1000, 1000)
