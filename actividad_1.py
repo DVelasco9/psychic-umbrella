@@ -52,7 +52,7 @@ class shark:                    #CLASS NAME EL NOMBRE DE CLASE DEBERIA SER ANIMA
 class tigershark(shark):
     methabolism = "High"
     
-    def trasheater():
+    def trasheater(self):
         print("The sharks has eaten over 1KG of ocean trash")
 
 class dogs():
@@ -72,6 +72,6 @@ shark3 = shark()
 
 
 shark4 = tigershark()
-shark4.bite
-shark4.trasheater
+shark4.bite()
+shark4.trasheater()
 print(f"The methabolism of this shark is {shark4.methabolism}")
