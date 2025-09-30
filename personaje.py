@@ -104,15 +104,20 @@ class mago(personaje):
 
 class enemy_p(personaje):
     poison = 0
+    truco = 0
 
     @classmethod
     def hemorragia(cls):
         cls.poison = 5
 
-    def __init__(self, nombre, fuerza, inteligencia, vida, defensa, truco, poison=None):
-        super().__init__(nombre, fuerza, inteligencia, vida, defensa)
-        self.truco = truco
+    @classmethod
+    def trick(cls):
+        cls.truco = 5
 
+    def __init__(self, nombre, fuerza, inteligencia, vida, defensa, truco=None, poison=None):
+        super().__init__(nombre, fuerza, inteligencia, vida, defensa)
+        
+        self.truco = truco if truco is not None else enemy_p.truco
         self.poison = poison if poison is not None else enemy_p.poison
 
 
@@ -122,8 +127,10 @@ class enemy_p(personaje):
         print("°Truco", self.truco)
         print("°Veneno", self.poison)
 
-   # def subir_nivel(self, fuerza, vida, defensa, inteligencia,):
-    #    super().subir_nivel(fuerza, vida, defensa, inteligencia)
+    def subir_nivel(self, fuerza, vida, defensa, inteligencia, truco=None, poison=None):
+        super().subir_nivel(fuerza, vida, defensa, inteligencia)
+        self.truco = self.truco + truco
+        self.poison = self.poison + poison
 
     def damage(self, enemigo):
         daño = self.truco * self.poison - enemigo.defensa
@@ -132,21 +139,49 @@ class enemy_p(personaje):
     def sound(self):
         print("sssss")
 
+class unique(personaje):
+    def __init__(self, nombre, fuerza, inteligencia, vida, defensa):
+        super().__init__(nombre, fuerza, inteligencia, vida, defensa)
+    
+    def atributos(self):
+        return super().atributos()
+    
+    def damage(self, enemigo):
+        daño = super().damage(enemigo)
+        return max(0, daño)
+    
+    def dog_sound(self):
+        print("WOOF")
+
+
+    def sound(self):
+        print("")
+
+
+
+
+
 guts = guerrero("Guts", 20, 10, 100, 100, 5)
-vanessa = mago("Vanessa", 5, 30, 50, 10, 5)
+vanessa = mago("Violet", 5, 30, 50, 10, 5)
 
 
-#guts.cambiar_arma()
-#guts.espada
+guts.cambiar_arma()
+guts.espada
 guts.atributos()
-guts.subir_nivel(1,2,3,4)
-guts.atributos()
-#guts.walk()
-#guts.sound()
+guts.walk()
+guts.sound()
 
+enemy_p.trick()
 enemy_p.hemorragia()
-comun = enemy_p("common", 10, 0, 30, 5, 3)
+comun = enemy_p("common", 10, 0, 10, 5)
 comun.atributos()
+
+
+
+rare = enemy_p("rare", 30, 10, 30, 10)
+rare.subir_nivel(0,0,0,0,4,10)
+rare.atributos()
+
 
 comun.atacar(guts)
 
@@ -169,6 +204,11 @@ def combate(p1, p2):
 
 combate(guts, vanessa)
 
+dog = unique("ELJAJAS",1000,1000,1000,1000)
+dog.dog_sound()
+
+guts.atacar(dog)
+dog.atacar(guts)
 
 #dog = personaje("EL JAJAS", 1000, 1000, 1000, 1000)
 
