@@ -98,19 +98,22 @@ class mago(personaje):
         daño = self.inteligencia * self.libro - enemigo.defensa
         return max(0, daño)
 
-class enemy(personaje):
-    poison = int()
+    def sound(self):
+        print("CARTERA")
+
+
+class enemy_p(personaje):
+    poison = 0
 
     @classmethod
-    def hemorragia(enemy):
-        common = 5
+    def hemorragia(cls):
+        cls.poison = 5
 
-        enemy.poison = common
-
-    def __init__(self, nombre, fuerza, inteligencia, vida, defensa, truco, poison):
+    def __init__(self, nombre, fuerza, inteligencia, vida, defensa, truco, poison=None):
         super().__init__(nombre, fuerza, inteligencia, vida, defensa)
         self.truco = truco
-        self.poison = poison
+
+        self.poison = poison if poison is not None else enemy_p.poison
 
 
 
@@ -119,6 +122,9 @@ class enemy(personaje):
         print("°Truco", self.truco)
         print("°Veneno", self.poison)
 
+   # def subir_nivel(self, fuerza, vida, defensa, inteligencia,):
+    #    super().subir_nivel(fuerza, vida, defensa, inteligencia)
+
     def damage(self, enemigo):
         daño = self.truco * self.poison - enemigo.defensa
         return max(0, daño)
@@ -126,21 +132,42 @@ class enemy(personaje):
     def sound(self):
         print("sssss")
 
-guts = guerrero("Guts", 20, 10, 100, 10, 5)
+guts = guerrero("Guts", 20, 10, 100, 100, 5)
+vanessa = mago("Vanessa", 5, 30, 50, 10, 5)
+
+
 #guts.cambiar_arma()
 #guts.espada
-#guts.atributos()
+guts.atributos()
+guts.subir_nivel(1,2,3,4)
+guts.atributos()
 #guts.walk()
 #guts.sound()
 
-comun = enemy("common", 10, 0, 30, 5, 3, 0)
-comun.hemorragia()
+enemy_p.hemorragia()
+comun = enemy_p("common", 10, 0, 30, 5, 3)
 comun.atributos()
 
 comun.atacar(guts)
 
+def combate(p1, p2):
+    turno = 0
+    while p1.esta_vivo() and p2.esta_vivo():
+        print("\nTurno", turno)
+        print(">>> Acción de ", p1.nombre, ":", sep="")
+        p1.atacar(p2)
+        print(">>> Acción de ", p2.nombre, ":", sep="")
+        p2.atacar(p1)
+        turno += 1
+    if p1.esta_vivo():
+        print(f"\n{p1.nombre} gana")
+    elif p2.esta_vivo():
+        print(f"\n{p2.nombre} gana")
+    else: 
+        print("\nEmpate")
 
 
+combate(guts, vanessa)
 
 
 #dog = personaje("EL JAJAS", 1000, 1000, 1000, 1000)
