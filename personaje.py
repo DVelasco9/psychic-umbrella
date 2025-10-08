@@ -1,9 +1,6 @@
 # ============================================================
 # PROGRAMA DE HERENCIA Y POLIMORFISMO CON CLASES ABSTRACTAS
 # Autor: Diego
-# Descripción:
-# Sistema de combate entre personajes usando Programación Orientada a Objetos.
-# Incluye clases abstractas, herencia, métodos sobrescritos y estáticos.
 # ============================================================
 
 from abc import ABC, abstractmethod
@@ -143,7 +140,7 @@ class mago(personaje):
 
     def sound(self):
         """Sonido característico del mago."""
-        print("✨ WOOOOSH ✨")
+        print(" WOOOOSH ")
 
 
 # ------------------------------------------------------------

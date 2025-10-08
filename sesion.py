@@ -1,170 +1,179 @@
-#class shark:
- #   def __init__(self, name, size, age):
-  #      self.name = name            #PUBLIC ATTRIBUTE
-   #    self.__age = age            #PRIVATE ATTRIBUTE
-    
+# Importación de módulos necesarios
+from abc import ABC, abstractmethod  # ABC para clases abstractas, abstractmethod para métodos abstractos
+import re  # Para expresiones regulares (validación de email)
 
-    #PUBLIC METHOD
-   # def get_info(self):
-    #    return f"name: {self.name}, Size: {self._size}, Age: {self.__age}"
-    
+# Clase abstracta Employee que define la estructura base para todos los empleados
+class Employee(ABC):
+  # Variables de clase (compartidas por todas las instancias)
+  _company_status = "Active"  # Atributo protegido con el estado de la compañía
+  role = "Employee"  # Rol por defecto
 
-    #def bark(self):
-     
-     #   print("WOOF")
+  # Constructor de la clase
+  def __init__(self, name, age, email, employee_id):
+      self.name = name  # Atributo público
+      self.age = age  # Atributo público
+      self._email = email  # Atributo protegido (convención: _ para indicar "protegido")
+      self.__employee_id = employee_id  # Atributo privado (doble __)
+      self.__salary_paid = False  # Atributo privado para controlar si se pagó el salario
 
-    #GETTER AND SETTER FOR PRIVATE ATTRIBUTE
-    #def get_age(self):
-     #   return self.__age
-    
-    #def set_age(self, age):
-    #    if age >= 0:
-     #       self.__age = age
-      #  else:
-       #     print("invalid age")
-        
+  # Método para saludar
+  def salute(self):
+    print(f'Hello! I am {self.name}, your {self.role.lower()}')
+
+  # Método para mostrar información del empleado
+  def view_info(self):
+    print(f"""Employee Information: 
+    ID: {self.__employee_id} 
+    Name: {self.name}
+    Age: {self.age}
+    Email: {self._email}
+    Role: {self.role} 
+    Status: {self._company_status}""")
+
+  # Getter para el ID del empleado (atributo privado)
+  def get_employee_id(self):
+      print(f"ID: {self.__employee_id}")
+
+  # Setter para el email
+  def set_email(self):
+      self._email = input(f"Set a new email for {self.name}: ")
+      print(f"New email: {self._email}")
+
+  # Método de clase para cambiar el estado de la compañía
+  @classmethod
+  def change_company_status(cls):
+      cls._company_status = input("Set a new company status: ")
+      print(f"Company status changed to: {cls._company_status}")
+
+  # Método estático para validar formato de email
+  @staticmethod
+  def validate_email(email):
+      pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'  # Patrón regex para email
+      print(f"The email: {email} is it valid? {re.match(pattern, email) is not None}")
+
+  # Método abstracto que debe ser implementado por las clases hijas
+  @abstractmethod
+  def work(self):
+      pass
+
+  # Método para marcar el salario como pagado
+  def pay_salary(self):
+      self.__salary_paid = True
+      print(f"Salary paid successfully to {self.name}")
 
 
+# Clase Developer que hereda de Employee
+class Developer(Employee):
+  team = "Development"  # Variable de clase específica para desarrolladores
+  _base_salary = 20000  # Salario base protegido
 
-#tigershark = shark("Tiburon", 2, 2)
+  # Constructor que extiende al del padre
+  def __init__(self, name, age, email, employee_id, programming_language):
+    super().__init__(name, age, email, employee_id)  # Llamada al constructor del padre
+    self.role = "Developer"  # Sobrescribe el rol
+    self.programming_language = programming_language  # Atributo específico
 
-#print(tigershark.name)
-#print(tigershark._size)
-#print(tigershark.get_age())
+  # Implementación del método abstracto work
+  def work(self):
+      print(f"  - {self.name} is developing software in {self.programming_language}")
 
-#tigershark.set_age(6)
-#print(tigershark.get_info())
+  # Método para mostrar el salario
+  def salary(self):
+      print(f"  - {self.name}'s salary: ${self._base_salary}")
 
-from abc import ABC, abstractmethod
+  # Extiende el método view_info del padre
+  def view_info(self):
+      super().view_info()  # Llama al método del padre
+      print(f"   Programming Language: {self.programming_language}")
+      print(f"   Team: {self.team}")
 
-#___________________Listas___________________
-WorkersInfoBasica = []
-PasantesInfoBasica = []
 
-Aguinaldo = []
+# Clase GraphicDesigner que hereda de Employee
+class GraphicDesigner(Employee):
+  team = "Creative"  # Variable de clase específica para diseñadores
+  _base_salary = 15000  # Salario base
 
-#______________________________________________________FUNCIONES_GENERALES________________________________________________________________________________________________
-@staticmethod
-def CalcularAguinaldo():                                                                                        # Método estático independiente de los datos
-    print("Esta función es ajena a las listas locales, debe ser tomada únicamente cómo referencia y no cómo un cálculo oficial de la empresa")
-    Salario = int(input("Ingresar el salario del trabajador por día: "))
-    print(f"El aguinal correspondiente es de: {Salario * 15}")
+  def __init__(self, name, age, email, employee_id, design_tool):
+    super().__init__(name, age, email, employee_id)
+    self.role = "Graphic Designer"
+    self.design_tool = design_tool  # Herramienta de diseño específica
 
-def UbicarTrabajadores():                                                                                       # Muestra la información básica de todos los trabajadores
-    print(WorkersInfoBasica)
+  def work(self):
+    print(f"  - {self.name} is creating designs using {self.design_tool}")
 
-def UbicarPasantes():                                                                                           # Muestra nombre y puesto de todos los pasantes
-    print(PasantesInfoBasica)
+  # Método específico de diseñadores gráficos
+  def create_prototype(self):
+    print(f"{self.name} is creating a design prototype...")
 
-#_____________________________________________________________________CLASS______________________________________________________________________________________________
-class Worker(ABC):                # Class Name
-    Empresa = "MDSeguros"         # Class Attributes
+  def salary(self):
+    print(f"  - {self.name}'s salary: ${self._base_salary}")
 
-    def __init__(self, name, age, position): # Constructor
-        self.name = name                     # Object Attribute
-        self._age = age                      # Object Attribute
-        self.position = position             # Object Attribute
+  def view_info(self):
+    super().view_info()
+    print(f"    Design Tool: {self.design_tool}")
+    print(f"    Team: {self.team}")
 
-        WorkersInfoBasica.append(f"El trabajador {self.name} se desempeña como {self.position}.")        # Añade el objeto a una lista
-        WorkersInfoBasica.sort()                                                                         # Acomoda la lista alfabéticamente acorde al nombre
 
-        #print(f"Añadiendo trabajador {name}")     # Message when creating an object
-    
-    #____________________________Misc____________________________
-    def GoodMorning(self):                                                                     # Saludar al trabajador/pasante    
-        print(f"¡Buenos días {self.name}!")
+# Clase SeniorDeveloper que hereda de Developer
+class SeniorDeveloper(Developer):
+  def __init__(self, name, age, email, employee_id, programming_language, years_experience):
+    super().__init__(name, age, email, employee_id, programming_language)
+    self.role = "Senior Developer"
+    self.years_experience = years_experience  # Años de experiencia específicos
 
-    def MostrarInfo(self):                                                                     # Mostrar información del trabajador
-        return f"Nombre: {self.name} / Edad: {self._age} / Puesto: {self.position}"
+  def salary(self):
+    print(f"  - {self.name}'s salary: ${self._base_salary}")
 
-    #____________________________Pagos____________________________
-    def GetPaid(self):                                           # GetPaid method
-        print("¡El trabajador ha recibido su pago!")             # GetPaid message is printed
-    
-    def AguinaldoRecibido(self):                                 # Marca a los trabajadores que recibieron su aguinaldo y después lo confirma
-        Aguinaldo.append(self.name)
-        print(f"{self.name} recibió su aguinaldo")
-        print(f"Se ha otorgado aguinaldo este año a: {Aguinaldo}")
-    
-    #@abstractmethod
-    def DarPrestamo(self):
-        Prestamo = input("Introducir monto de préstamo: ")
-        print(f"{self.name} con el puesto {self.position} ha pedido un préstamo por {Prestamo}")
+  # Método específico para senior developers
+  def mentor_junior(self):
+    print(f"{self.name} is mentoring junior developers...")
 
-    #____________________________Cambios_de_puesto_o_empresa____________________________
+  def view_info(self):
+    super().view_info()
+    print(f"    Years experience: {self.years_experience}")
 
-    def CambioDePuesto(self):                                                           # Ayuda a cambiar de puesto al trabajador seleccionado
-        self.position = input(f"Puesto al que se moverá {self.name}: ")
-        print(f"Guardado {self.position} con éxito.")
 
-    @classmethod
-    def CambiarEmpresaTodos(self):                                                      # Migra toda la plantilla de trabajadores a otra empresa
-        Worker.Empresa = input("Empresa a traspasar trabajadores: ")
-        print(f"Guardado {self.Empresa} con éxito.")
-    
-    #____________________________Despido____________________________
-    def Despedido(self):
-        print(f"El trabajador {self.name} a culminado su estancia laboral en esta empresa.")      # Despide a un trabajador con una nota en su historial
-        Culminar = input("¿Fué renuncia voluntaria? [Y = 1/N = 0]: ")
-        if Culminar == "1":
-            self.position = "Renuncia"
-        elif Culminar == "0":
-            self.position = "Despedido/No recontratar"
-        else:
-            print("Reinicie el programa e introduzca un dígito válido.")
-    
-    @abstractmethod
-    def SellarPracticas(self):                                                                    # Método exclusivo de subclase Pasantes
-        pass
+# === Creación de objetos === #
+dev1 = Developer("Andrey", 25, "andrey@company.com", 1001, "Python")
+designer1 = GraphicDesigner("Maria", 28, "maria@company.com", 1002, "Figma")
+senior_dev = SeniorDeveloper("Angel", 32, "angel@company.com", 1003, "Java", 8)
+dev2 = Developer("Níz", 20, "niz@company.com", 1004, "JavaScript")
 
-    def SellarPracticas(self):
-        pass
 
-    
-#_________PASANTE__________________________________________________________________PASANTE_________________________________________________________________________
-class Pasante(Worker):
+# === Ejecución y demostración === #
+employees = [dev1, designer1, senior_dev, dev2]  # Lista con todos los empleados
 
-    def __init__(self, name, age, position, school): # Constructor
-        self.name = name
-        self._age = age
-        self.position = position
-        self.__school = school
+print("People chambianding:")  # Probablemente quería decir "working" o "changing"
+for emp in employees:
+  emp.work()  # Polimorfismo: cada empleado ejecuta su propia versión de work()
+print("-" * 40)
 
-        PasantesInfoBasica.append(f"El pasante {self.name} se desempeña como {self.position}.")    # Añade el objeto a una lista
-        PasantesInfoBasica.sort()                                                                  # Y la acomoda alfabéticamente
+print("View email:")
+for emp in employees:
+  print(f"  - {emp.name}'s email: {emp._email}")  # Accediendo a atributo protegido
+print("-" * 40)
 
-        print(f"Se ha añadido al pasante {self.name}")
-    
-    #____________________________MISC_____________________________
-    def MostrarInfo(self):                                                                                          # Muestra toda la info del objeto
-        return f"Nombre: {self.name} / Edad: {self._age} / Puesto: {self.position} / Escuela: {self.__school}"
-    
-    #____________________________Pagos____________________________
-    def GetPaid(self):                                                                                              # Advierte de que el pasante no recibe sueldo
-        print("El pasante no está autorizado a recibir pago remunerado, consulte administración.")
-    
-    def AguinaldoRecibido(self):                                                                                    # Advierte que el pasante no recibe aguinaldo
-        print("El pasante no está autorizado a recibir aguinaldo, consulte con administración")
-    
-    #@abstractmethod
-    #def DarPrestamo():
-    #    print("El pasante no puede recibir préstamos")
+# Demostración de cambiar email y validarlo
+dev1.set_email()
+Employee.validate_email(dev1._email)
 
-    #____________________________Culminación____________________________
+print("-" * 40)
+print("Employee salaries:")
+for emp in employees:
+  emp.salary()  # Cada empleado muestra su salario
+print("-" * 40)
 
-    def Despedido(self):                                                                                            # Culmina la relación con el pasante
-        print(f"El pasante {self.name} no ha culminado con exito sus pasantías. Notificar a {self.__school}.")
-        self.position = "No contratar en el futuro"
-    
-    def SellarPracticas(self):                                                                                      # Marca la finalización del periodo de practicas
-        print(f"El pasante {self.name} ha culminado sus prácticas.")
-        self.position = "Pasantía terminada"
+# Pagar salarios a todos los empleados
+for emp in employees:
+  emp.pay_salary()
+print("-" * 40)
 
-#__________________________________ACTIONS____________________________________ACTIONS____________________________ACTIONS____________________________________
+# Mostrar información completa de cada empleado
+for emp in employees:
+  emp.view_info()
+  print("-" * 40)
 
-Worker1 = Worker("Luis", 19, "Almacenista")                                                             # Constructor en acción
-Worker2 = Worker("Bonifacio", 25, "Recepcionista")
-Worker3 = Worker("Laura", 21, "Recursos Humanos")
-Pasante1 = Pasante("Lautaro", 18, "Asistente recursos humanos", "UAN")
-Pasante2 = Pasante("Pepe", 21, "Asistente Almacen", "UPEN")
-Pasante3 = Pasante("Avdul", 22, "Asistente de recepción", "UAN")
+# Métodos específicos de cada clase
+designer1.create_prototype()
+senior_dev.mentor_junior()
+print("-" * 40)
