@@ -231,23 +231,23 @@ class unique(personaje):
 guts = guerrero("Guts", 20, 10, 100, 100, 5)
 vanessa = mago("Violet", 5, 30, 50, 10, 5)
 
-guts.atributos()
-guts.walk()
-guts.sound()
+#guts.atributos()
+#guts.walk()
+#guts.sound()
 
 # Crear enemigos
 enemy_p.trick()
 enemy_p.hemorragia()
 
-comun = enemy_p("common", 10, 0, 10, 5)
-comun.atributos()
+#comun = enemy_p("common", 10, 0, 10, 5)
+#comun.atributos()
 
-rare = enemy_p("rare", 30, 10, 30, 10)
-rare.subir_nivel(0, 0, 0, 0, 4, 10)
-rare.atributos()
+#rare = enemy_p("rare", 30, 10, 30, 10)
+#rare.subir_nivel(0, 0, 0, 0, 4, 10)
+#rare.atributos()
 
 # Ejemplo de ataque simple
-comun.atacar(guts)
+#comun.atacar(guts)
 
 # ------------------------------------------------------------
 # FUNCIÓN combate()
