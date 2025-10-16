@@ -74,6 +74,7 @@ class rectangulo(figura_geometrica):
 
     def perimetro(self):
         print(f"El perimetro es igual a {(self.base * 2) + (self.height * 2)} metros")
+        print("-"*40)
 
 if user.lower() in ("cuadrado", "c"): 
     c = square(0,0,0)
