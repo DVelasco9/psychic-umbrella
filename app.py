@@ -1,7 +1,7 @@
 
 import tkinter as tk
 from PIL import Image, ImageTk
-
+from tkinter import ttk
 
 root = tk.Tk()
 
@@ -9,7 +9,7 @@ root = tk.Tk()
 root.title("RK EXAMPLE")
 root.configure(background="white")
 root.minsize(200,200)
-root.maxsize(1000,1000)
+root.maxsize(2000,2000)
 root.geometry("500x500+500+100")
 
 #CREATE TWO LABELS
@@ -23,6 +23,9 @@ original_image = Image.open(image_path)
 tk_image = ImageTk.PhotoImage(original_image)
 tk.Label(root, image=tk_image).pack()
 
-
+#CREATE AN EXIT BUTTON 
+#salida = ttk.Frame(root, padding=10)
+#salida.grid()
+#ttk.Button(salida, text="salida", command=root.destroy).grid(column=1, row=0)
 
 root.mainloop()
